@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Linha do Tempo - Corrida Espacial</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: #0d1117;
+      color: #c9d1d9;
+      font-family: 'Orbitron', sans-serif;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    /* Fundo estrelado */
+    .stars {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: transparent;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .star {
+      position: absolute;
+      width: 2px; height: 2px;
+      background: white;
+      border-radius: 50%;
+      opacity: 0.8;
+      animation: twinkle 2s infinite ease-in-out;
+    }
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.8; }
+      50% { opacity: 0.4; }
+    }
+
+    header {
+      background-color: #161b22;
+      color: #58a6ff;
+      text-align: center;
+      padding: 2rem 1rem;
+      font-size: 2.5rem;
+      z-index: 1;
+      position: relative;
+    }
+
+    .timeline-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      height: calc(100vh - 150px);
+      z-index: 1;
+    }
+
+    .event {
+      background: #1c2128;
+      border-left: 4px solid #58a6ff;
+      padding: 1rem;
+      margin: 0 1rem;
+      box-shadow: 0 0 10px rgba(88, 166, 255, 0.2);
+      max-width: 500px;
+      text-align: center;
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .event h3 {
+      margin-top: 0;
+      color: #58a6ff;
+    }
+    .event img {
+      max-width: 100%;
+      margin-top: 0.5rem;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+    .arrow {
+      background: none;
+      border: none;
+      color: #58a6ff;
+      font-size: 3rem;
+      cursor: pointer;
+      padding: 1rem;
+      transition: transform 0.2s;
+      user-select: none;
+      z-index: 2;
+    }
+    .arrow:hover {
+      transform: scale(1.2);
+    }
+    footer {
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.9rem;
+      color: #8b949e;
+      z-index: 1;
+      position: relative;
+    }
+
+    button {
+      background: #1461ad;
+      border: none;
+      padding: 8px 15px;
+      color: white;
+      font-family: inherit;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+    button:hover {
+      background: #0d6efd;
+    }
+    .extra {
+      display: none;
+      margin-top: 10px;
+      text-align: justify;
+    }
+  </style>
+</head>
+<body>
+  <div class="stars"></div>
+
+  <header>
+    Corrida Espacial: Ciência e Propaganda na Guerra Fria
+  </header>
+
+  <div class="timeline-container">
+    <button class="arrow" onclick="prevEvent()">&#8592;</button>
+    <div class="event" id="eventDisplay"></div>
+    <button class="arrow" onclick="nextEvent()">&#8594;</button>
+  </div>
+
+  <footer>
+    Desenvolvido por Paulo Michel e Marco Tock | Projeto educacional - Corrida Espacial
+  </footer>
+
+  <script>
+    const events = [
+      {title: '1957 - Sputnik I (URSS)', desc: 'Primeiro satélite artificial da Terra, lançado pela URSS em 4 de outubro de 1957.', img: 'https://64.media.tumblr.com/634509e8e52a416c657836228d296f0b/tumblr_oejux3Kfgf1sqf5tdo6_400.gifv', extra: 'O Sputnik I tinha apenas 58 cm de diâmetro e transmitia um simples sinal de rádio que podia ser captado na Terra.'},
+      {title: '1958 - Explorer 1 (EUA)', desc: 'Primeiro satélite americano, lançado em 31 de janeiro de 1958.', img: 'https://upload.wikimedia.org/wikipedia/commons/7/73/Explorer1.jpg', extra: 'O Explorer 1 descobriu os cinturões de radiação de Van Allen, fundamentais para entender o ambiente espacial.'},
+      {title: '1961 - Yuri Gagarin (URSS)', desc: 'Primeiro humano no espaço em 12 de abril de 1961, a bordo da Vostok 1.', img: 'https://s2.glbimg.com/b9B7SPMsIAsGmi1rbwW-s2A1hAM=/e.glbimg.com/og/ed/f/original/2021/03/09/16042132243_c13949f25e_b.jpg', extra: 'Yuri Gagarin orbitou a Terra uma vez e se tornou herói nacional e símbolo da conquista espacial soviética.'},
+      {title: '1962 - John Glenn (EUA)', desc: 'Primeiro americano a orbitar a Terra em 20 de fevereiro de 1962.', img: 'https://upload.wikimedia.org/wikipedia/commons/1/10/John_Glenn_Entering_Friendship_7_-_GPN-2000-000652.jpg', extra: 'John Glenn completou três órbitas ao redor da Terra a bordo da cápsula Friendship 7.'},
+      {title: '1963 - Valentina Tereshkova (URSS)', desc: 'Primeira mulher no espaço em 16 de junho de 1963.', img: 'https://guiadoestudante.abril.com.br/wp-content/uploads/sites/4/2016/12/valentina-tereshkova-vostok-6.jpg?crop=1&resize=1212,909', extra: 'Tereshkova passou quase três dias no espaço a bordo da Vostok 6, realizando experimentos científicos.'},
+      {title: '1965 - Alexei Leonov (URSS)', desc: 'Primeira caminhada espacial da história, realizada em 18 de março de 1965.', img: 'https://64.media.tumblr.com/tumblr_lvpm11RBuD1qg39ewo1_500.gifv', extra: 'Leonov passou 12 minutos fora da espaçonave Voskhod 2, enfrentando dificuldades para reentrar devido à expansão de seu traje.'},
+      {title: '1966 - Luna 9 (URSS)', desc: 'Primeira sonda a realizar pouso suave na Lua em 3 de fevereiro de 1966.', img: 'https://media.sciencephoto.com/image/c0247781/800wm', extra: 'O Luna 9 enviou as primeiras imagens panorâmicas da superfície lunar para a Terra.'},
+      {title: '1969 - Apollo 11 (EUA)', desc: 'Neil Armstrong e Buzz Aldrin caminham na Lua em 20 de julho de 1969.', img: 'https://media1.tenor.com/m/GuzFcXzoL2MAAAAC/moonlanding.gif', extra: 'Armstrong proferiu a famosa frase "Um pequeno passo para o homem, um salto gigante para a humanidade".'},
+      {title: '1971 - Salyut 1 (URSS)', desc: 'Primeira estação espacial lançada pela humanidade, em 19 de abril de 1971.', img: 'https://img.odcdn.com.br/wp-content/uploads/2021/04/Model_of_Salyut-7.jpg', extra: 'A Salyut 1 permaneceu em órbita por 175 dias antes de ser desativada e destruída na reentrada.'},
+      {title: '1975 - Apollo-Soyuz', desc: 'Missão conjunta entre EUA e URSS, marcando o início da cooperação espacial.', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Portrait_of_ASTP_crews_-_restoration.jpg/330px-Portrait_of_ASTP_crews_-_restoration.jpg', extra: 'A missão simbolizou o fim da Corrida Espacial e o início de parcerias internacionais no espaço.'}
+    ];
+
+    let currentIndex = 0;
+
+    function renderEvent() {
+      const e = events[currentIndex];
+      document.getElementById('eventDisplay').innerHTML = `
+        <h3>${e.title}</h3>
+        <p>${e.desc}</p>
+        <img src="${e.img}" alt="${e.title}">
+        <button onclick="toggleExtra()">Saiba mais</button>
+        <p class="extra" id="extraInfo">${e.extra}</p>
+      `;
+    }
+
+    function toggleExtra() {
+      const extra = document.getElementById('extraInfo');
+      extra.style.display = extra.style.display === 'block' ? 'none' : 'block';
+    }
+
+    function prevEvent() {
+      currentIndex = (currentIndex - 1 + events.length) % events.length;
+      renderEvent();
+    }
+
+    function nextEvent() {
+      currentIndex = (currentIndex + 1) % events.length;
+      renderEvent();
+    }
+
+    function createStars() {
+      const starContainer = document.querySelector('.stars');
+      for (let i = 0; i < 100; i++) {
+        const star = document.createElement('div');
+        star.classList.add('star');
+        star.style.top = Math.random() * 100 + '%';
+        star.style.left = Math.random() * 100 + '%';
+        star.style.animationDuration = (Math.random() * 2 + 1) + 's';
+        starContainer.appendChild(star);
+      }
+      for (let i = 0; i < 3; i++) {
+        const shooting = document.createElement('div');
+        shooting.classList.add('shooting-star');
+        shooting.style.top = Math.random() * 100 + '%';
+        shooting.style.left = Math.random() * 100 + '%';
+        shooting.style.animationDelay = (Math.random() * 5) + 's';
+        starContainer.appendChild(shooting);
+      }
+    }
+
+    createStars();
+    renderEvent();
+  </script>
+</body>
+</html>
