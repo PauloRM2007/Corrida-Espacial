@@ -1,0 +1,321 @@
+/* Scroll suave */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Corpo e fundo */
+body {
+  font-family: 'Segoe UI', sans-serif;
+  color: #eee;
+  background: radial-gradient(circle at top, #001022, #000010);
+  overflow-x: hidden;
+}
+
+/* Canvas de estrelas fixas */
+#starfield {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -3;
+}
+
+/* Estrelas cadentes */
+.shooting-star {
+  position: fixed;
+  width: 2px;
+  height: 80px;
+  background: linear-gradient(45deg, white, transparent);
+  opacity: 0;
+  transform: rotate(-55deg);
+  animation: shoot 6s ease-in-out infinite;
+  z-index: -2;
+}
+.shooting-star:nth-child(1) {
+  top: 15%;
+  left: -100px;
+  animation-delay: 2s;
+}
+.shooting-star:nth-child(2) {
+  top: 50%;
+  left: -140px;
+  animation-delay: 7s;
+}
+.shooting-star:nth-child(3) {
+  top: 80%;
+  left: -80px;
+  animation-delay: 12s;
+}
+
+@keyframes shoot {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) rotate(-55deg);
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(120vw, 120vh) rotate(-55deg);
+  }
+}
+
+/* Seção de Contexto */
+#context {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  background-color: #142750;
+  padding: 4rem 2rem;
+  align-items: center;
+}
+
+/* Título full-width */
+.context-text h1 {
+  grid-column: 1 / -1;
+  text-align: center;
+  font-size: 3rem;
+}
+
+/* Texto explicativo (coluna 1) */
+.context-text p {
+  grid-column: 1 / 2;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-top: 1rem;
+}
+
+/* Imagem (coluna 2) */
+.context-image img {
+  max-width: 100%;
+  width: 900px;               /* Aumenta a largura */
+  height: auto;
+  border-radius: 12px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+
+/* “Saiba mais” centralizado com setas caret */
+.scroll-down {
+  grid-column: 1 / -1;
+  justify-self: center;
+  text-decoration: none;
+  color: #eee;
+  font-size: 1.1rem;
+  margin-top: 2rem;
+  display: inline-block;
+  font-weight: bold;
+}
+.arrows {
+  margin-top: 0.5rem;
+}
+.arrow {
+  display: block;
+  transform: rotate(180deg);
+  font-size: 2rem;
+  line-height: 0.8;
+}
+
+/* Separador */
+hr {
+  border: none;
+  height: 2px;
+  background: rgba(255,255,255,0.2);
+  margin: 2rem 0;
+}
+
+/* Linha do tempo */
+#timeline {
+  padding: 3rem 2rem;
+}
+.timeline-container {
+  position: relative;
+  width: 90%;
+  max-width: 1000px;
+  margin: auto;
+}
+.timeline-container::before {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0;
+  left: 50%;
+  width: 4px;
+  background: rgba(255,255,255,0.3);
+  transform: translateX(-50%);
+}
+
+/* Itens da timeline */
+.timeline-item {
+  position: relative;
+  width: 50%;
+  margin: 4rem 0;
+  padding: 1rem 2rem;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.6s ease-out;
+  text-align: justify;
+}
+.timeline-item.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+.timeline-item:nth-child(odd) {
+  left: 0;
+  text-align: right;
+}
+.timeline-item:nth-child(even) {
+  left: 50%;
+  text-align: left;
+}
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  top: 1.2rem;
+  width: 16px; height: 16px;
+  background: #1e88e5;
+  border-radius: 50%;
+}
+.timeline-item:nth-child(odd)::before {
+  right: -8px;
+}
+.timeline-item:nth-child(even)::before {
+  left: -8px;
+}
+.timeline-item .content {
+  background: rgba(255,255,255,0.05);
+  padding: 1.5rem;
+  border-radius: 8px;
+}
+.timeline-item .content h2 {
+  font-size: 1.6rem;
+  margin-bottom: 0.8rem;
+}
+.timeline-item .content img {
+  width: 100%;
+  border-radius: 4px;
+  margin: 0.8rem 0;
+}
+.timeline-item .content p {
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+/* Planeta Terra no final */
+.earth-container {
+  display: flex;
+  justify-content: bottom;
+  align-items: flex-end;
+  width: 100%;
+  height: 100px;
+  margin-top: 4rem;
+  
+}
+.earth-image {
+  width: 2000px;
+  opacity: 0.2;
+  transform: translateY(50px);
+  animation: riseUp 2s ease-out forwards;
+}
+
+@keyframes riseUp {
+  to {
+    transform: translateY(0);
+  }
+}
+
+/* botão de abrir quiz */
+.quiz-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #1e88e5;
+  color: #fff;
+  border: none;
+  padding: 1rem;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+/* overlay do modal */
+.quiz-modal {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.8);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* conteúdo interno do quiz */
+.quiz-content {
+  background: #142750;
+  padding: 2rem;
+  border-radius: 8px;
+  max-width: 90%;
+  width: 400px;
+  color: #eee;
+  position: relative;
+}
+
+/* botão de fechar */
+.close-btn {
+  position: absolute;
+  top: 10px; right: 10px;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+/* lista de opções */
+.quiz-options {
+  list-style: none;
+  margin-top: 1rem;
+  padding: 0;
+}
+
+.quiz-options li {
+  background: rgba(255,255,255,0.1);
+  padding: 0.8rem;
+  margin-bottom: 0.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+/* estados de resposta */
+.quiz-options li.correct {
+  background: #2e7d32;
+  color: #fff;
+}
+
+.quiz-options li.wrong {
+  background: #c62828;
+  color: #fff;
+}
+
+/* botão "próxima pergunta" */
+#next-question {
+  margin-top: 1rem;
+  background: #1e88e5;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  display: none;
+}
